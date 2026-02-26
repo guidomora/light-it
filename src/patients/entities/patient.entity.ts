@@ -38,8 +38,9 @@ export class PatientEntity {
   phoneNumber: string;
 
   @ApiProperty({
-    example: 'https://cdn.example.com/documents/patient-document.jpg',
-    description: 'URL of the patient document photo.',
+    example:
+      'https://res.cloudinary.com/node161/image/upload/v000000/patients/documents/document.jpg',
+    description: 'Cloudinary URL of the patient document photo.',
   })
   @Column({ type: 'varchar', length: 500 })
   documentPhotoUrl: string;

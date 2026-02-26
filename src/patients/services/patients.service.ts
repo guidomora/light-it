@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientDto } from '../dto/create-patient.dto';
 import { PatientEntity } from '../entities/patient.entity';
+import { UploadedDocumentPhoto } from '../interfaces/uploaded-document-photo.interface';
 import { CreatePatientUseCase } from '../use-cases/create-patient.use-case';
 
 @Injectable()
@@ -9,7 +10,11 @@ export class PatientsService {
 
   async createPatient(
     createPatientDto: CreatePatientDto,
+    uploadedDocumentPhoto: UploadedDocumentPhoto,
   ): Promise<PatientEntity> {
-    return this.createPatientUseCase.createPatient(createPatientDto);
+    return this.createPatientUseCase.createPatient(
+      createPatientDto,
+      uploadedDocumentPhoto,
+    );
   }
 }

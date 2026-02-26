@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreatePatientDto {
   @ApiProperty({
@@ -35,16 +35,4 @@ export class CreatePatientDto {
   @IsNotEmpty()
   @Length(6, 40)
   phoneNumber: string;
-
-  @ApiProperty({
-    example: 'https://example.com/documents/johndoe.jpg',
-    minLength: 10,
-    maxLength: 500,
-    format: 'uri',
-    description: 'URL of the patient document photo.',
-  })
-  @IsUrl({ require_protocol: true })
-  @IsNotEmpty()
-  @Length(10, 500)
-  documentPhotoUrl: string;
 }
