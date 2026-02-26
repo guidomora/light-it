@@ -1,7 +1,8 @@
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PatientsModule } from './patients/patients.module';
 import { ConfigModule } from '@nestjs/config';
+import { PatientsModule } from './patients/patients.module';
 
 @Module({
   imports: [
@@ -18,6 +19,13 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.POSTGRES_DB ?? 'myapp_db',
       autoLoadEntities: true,
       synchronize: true,
+    }),
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: Number(process.env.REDIS_PORT ?? 6379),
+        password: process.env.REDIS_PASSWORD || undefined,
+      },
     }),
     PatientsModule,
   ],

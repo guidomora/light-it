@@ -2,6 +2,7 @@
 
 Patient registration API built with NestJS + TypeORM + PostgreSQL.
 The patient document image is uploaded to Cloudinary, and only the URL is stored in the database.
+Confirmation email sending is asynchronous through BullMQ + Redis + Nodemailer.
 
 ## Requirements
 
@@ -18,7 +19,7 @@ npm install
 ## 2) Configure environment variables
 
 This repo uses a root `.env` file (see [src/app.module.ts](src/app.module.ts)).
-The same `POSTGRES_*` values are used by both the API and `docker-compose.yaml`.
+The same `POSTGRES_*` and `REDIS_*` values are used by both the API and `docker-compose.yaml`.
 
 Copy `templates.env` to `.env`:
 
@@ -33,15 +34,28 @@ POSTGRES_USER=user
 POSTGRES_PASSWORD=password123
 POSTGRES_DB=myapp_db
 
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+
+MAIL_HOST=localhost
+MAIL_PORT=1025
+MAIL_SECURE=false
+MAIL_USER=
+MAIL_PASSWORD=
+MAIL_FROM=no-reply@lightit-challenge.local
+
 CLOUDINARY_CLOUD_NAME=node161
 API_KEY=your_cloudinary_api_key
 API_SECRET=your_cloudinary_api_secret
 ```
 
-## 3) Start PostgreSQL with Docker
+Mail variables can point to Mailtrap (or any SMTP server) for local validation.
+
+## 3) Start PostgreSQL and Redis with Docker
 
 ```
-docker compose up -d postgres
+docker compose up -d postgres redis
 ```
 
 Verify it is running:
@@ -74,6 +88,8 @@ Main endpoint: `POST /patients` using `multipart/form-data` with:
 - `emailAddress` (string)
 - `phoneNumber` (string)
 - `documentPhoto` (image file)
+
+After patient creation, a background BullMQ worker sends the confirmation email from the queue.
 
 ## Quick curl example
 

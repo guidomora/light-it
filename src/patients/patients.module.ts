@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { NotificationsModule } from '../notifications/notifications.module';
 import { CloudinaryDocumentPhotoStorageAdapter } from './adapters/cloudinary-document-photo-storage.adapter';
 import { PatientEntity } from './entities/patient.entity';
 import { DOCUMENT_PHOTO_STORAGE } from './interfaces/document-photo-storage.interface';
@@ -10,7 +11,7 @@ import { PatientsService } from './services/patients.service';
 import { CreatePatientUseCase } from './use-cases/create-patient.use-case';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PatientEntity])],
+  imports: [TypeOrmModule.forFeature([PatientEntity]), NotificationsModule],
   controllers: [PatientsController],
   providers: [
     PatientsService,
