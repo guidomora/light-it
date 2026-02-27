@@ -1,46 +1,16 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import nodemailer, { type Transporter } from 'nodemailer';
+import * as nodemailer from 'nodemailer';
+import { type Transporter } from 'nodemailer';
 import { EmailSender } from '../interfaces/email-sender.interface';
+import { MailConfiguration } from '../interfaces/mail-configuration.interface';
 import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
 
 @Injectable()
 export class NodemailerEmailSenderAdapter implements EmailSender {
-  private readonly mailTransporter: Transporter;
-  private readonly fromEmailAddress: string;
-
-  constructor() {
-    const mailHost = process.env.MAIL_HOST ?? 'localhost';
-    const mailPort = Number(process.env.MAIL_PORT ?? 1025);
-    const mailSecureTransport =
-      (process.env.MAIL_SECURE ?? 'false').toLowerCase() === 'true';
-    const mailUser = process.env.MAIL_USER;
-    const mailPassword = process.env.MAIL_PASSWORD;
-    const mailFromAddress =
-      process.env.MAIL_FROM ?? 'no-reply@lightit-challenge.local';
-
-    if (Number.isNaN(mailPort)) {
-      throw new Error('MAIL_PORT must be a valid number.');
-    }
-
-    if ((mailUser && !mailPassword) || (!mailUser && mailPassword)) {
-      throw new Error('MAIL_USER and MAIL_PASSWORD must be provided together.');
-    }
-
-    this.mailTransporter = nodemailer.createTransport({
-      host: mailHost,
-      port: mailPort,
-      secure: mailSecureTransport,
-      auth:
-        mailUser && mailPassword
-          ? {
-              user: mailUser,
-              pass: mailPassword,
-            }
-          : undefined,
-    });
-
-    this.fromEmailAddress = mailFromAddress;
-  }
+  private readonly mailConfiguration = this.getMailConfiguration();
+  private readonly mailTransporter: Transporter = this.createMailTransporter();
+  private readonly fromEmailAddress: string =
+    this.mailConfiguration.mailFromAddress;
 
   async sendPatientConfirmationEmail(
     patientConfirmationEmailJob: PatientConfirmationEmailJobInput,
@@ -57,5 +27,45 @@ export class NodemailerEmailSenderAdapter implements EmailSender {
         `Failed to send confirmation email for patient ${patientConfirmationEmailJob.patientId}.`,
       );
     }
+  }
+
+  private getMailConfiguration(): MailConfiguration {
+    const mailProvider = process.env.MAIL_PROVIDER;
+    const mailUser = process.env.MAIL_USER;
+    const mailFromAddress = process.env.MAIL_FROM;
+    const mailKey = process.env.MAIL_KEY;
+
+    if (!mailProvider || !mailUser || !mailFromAddress || !mailKey) {
+      throw new Error(
+        'Missing mail configuration. Required env vars: MAIL_PROVIDER, MAIL_USER, MAIL_FROM, MAIL_KEY.',
+      );
+    }
+
+    const normalizedMailProvider = mailProvider.toLowerCase();
+
+    if (normalizedMailProvider !== 'gmail') {
+      throw new Error(
+        `MAIL_PROVIDER "${mailProvider}" is not supported. Expected "gmail".`,
+      );
+    }
+
+    return {
+      mailUser,
+      mailFromAddress,
+      mailKey,
+    };
+  }
+
+
+  private createMailTransporter(): Transporter {
+    const { mailUser, mailKey } = this.mailConfiguration;
+
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: mailUser,
+        pass: mailKey,
+      },
+    });
   }
 }

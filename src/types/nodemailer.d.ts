@@ -8,9 +8,10 @@ declare module 'nodemailer' {
   }
 
   export interface TransportOptions {
-    host: string;
-    port: number;
-    secure: boolean;
+    service?: string;
+    host?: string;
+    port?: number;
+    secure?: boolean;
     auth?: {
       user: string;
       pass: string;

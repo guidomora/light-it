@@ -22,7 +22,7 @@ export class BullmqEmailQueuePublisher implements EmailQueuePublisher {
       PATIENT_CONFIRMATION_EMAIL_JOB_NAME,
       patientConfirmationEmailJob,
       {
-        jobId: `patient-confirmation-email:${patientConfirmationEmailJob.patientId}`,
+        jobId: `patient-confirmation-email-${patientConfirmationEmailJob.patientId}`,
         attempts: 3,
         backoff: {
           type: 'exponential',

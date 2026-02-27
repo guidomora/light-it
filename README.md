@@ -38,19 +38,18 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=
 
-MAIL_HOST=localhost
-MAIL_PORT=1025
-MAIL_SECURE=false
-MAIL_USER=
-MAIL_PASSWORD=
-MAIL_FROM=no-reply@lightit-challenge.local
+MAIL_PROVIDER=gmail
+MAIL_USER=lightitpatient@gmail.com
+MAIL_FROM=lightitpatient@gmail.com
+MAIL_KEY=your_gmail_app_password
 
 CLOUDINARY_CLOUD_NAME=node161
 API_KEY=your_cloudinary_api_key
 API_SECRET=your_cloudinary_api_secret
 ```
 
-Mail variables can point to Mailtrap (or any SMTP server) for local validation.
+Required mail variables are `MAIL_PROVIDER`, `MAIL_USER`, `MAIL_FROM`, and `MAIL_KEY`.
+If any required value is missing or empty, the app will throw an error at startup.
 
 ## 3) Start PostgreSQL and Redis with Docker
 
