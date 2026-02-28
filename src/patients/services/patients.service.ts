@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientDto } from '../dto/create-patient.dto';
 import { PatientEntity } from '../entities/patient.entity';
-import { UploadedDocumentPhoto } from '../interfaces/uploaded-document-photo.interface';
+import { UploadedDocumentPhoto } from '../interfaces';
 import { CreatePatientUseCase } from '../use-cases/create-patient.use-case';
 
 @Injectable()

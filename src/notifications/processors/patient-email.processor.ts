@@ -2,7 +2,7 @@ import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { PATIENT_EMAIL_QUEUE_NAME } from '../constants/patient-email.constants';
-import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
+import { PatientConfirmationEmailJobInput } from '../interfaces';
 import { SendPatientConfirmationNotificationUseCase } from '../use-cases/send-patient-confirmation-notification.use-case';
 
 @Processor(PATIENT_EMAIL_QUEUE_NAME)

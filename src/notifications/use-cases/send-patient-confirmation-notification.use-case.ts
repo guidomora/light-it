@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   PATIENT_CONFIRMATION_NOTIFICATION_CHANNEL,
+  PatientConfirmationEmailJobInput,
   PatientConfirmationNotificationChannel,
-} from '../interfaces/patient-confirmation-notification-channel.interface';
-import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
+} from '../interfaces';
 
 @Injectable()
 export class SendPatientConfirmationNotificationUseCase {

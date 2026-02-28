@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PatientEntity } from '../../patients/entities/patient.entity';
 import {
   EMAIL_QUEUE_PUBLISHER,
   EmailQueuePublisher,
-} from '../interfaces/email-queue-publisher.interface';
+} from '../interfaces';
+import { buildNotificationPatientEntity } from '../mocks';
 import { EnqueuePatientConfirmationEmailUseCase } from './enqueue-patient-confirmation-email.use-case';
 
 describe('EnqueuePatientConfirmationEmailUseCase', () => {
@@ -32,11 +32,7 @@ describe('EnqueuePatientConfirmationEmailUseCase', () => {
   });
 
   it('maps patient data into queue payload and publishes it', async () => {
-    const patientEntity = {
-      id: 'patient-1',
-      fullName: 'Ada Lovelace',
-      emailAddress: 'ada@example.com',
-    } as PatientEntity;
+    const patientEntity = buildNotificationPatientEntity();
 
     await enqueuePatientConfirmationEmailUseCase.enqueuePatientConfirmationEmail(
       patientEntity,

@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   PATIENT_CONFIRMATION_NOTIFICATION_CHANNEL,
   PatientConfirmationNotificationChannel,
-} from '../interfaces/patient-confirmation-notification-channel.interface';
+} from '../interfaces';
+import { buildPatientConfirmationEmailJobInput } from '../mocks';
 import { SendPatientConfirmationNotificationUseCase } from './send-patient-confirmation-notification.use-case';
 
 describe('SendPatientConfirmationNotificationUseCase', () => {
@@ -31,11 +32,8 @@ describe('SendPatientConfirmationNotificationUseCase', () => {
   });
 
   it('delegates to notification channel with the job payload', async () => {
-    const patientConfirmationNotification = {
-      patientId: 'patient-1',
-      patientFullName: 'Ada Lovelace',
-      patientEmailAddress: 'ada@example.com',
-    };
+    const patientConfirmationNotification =
+      buildPatientConfirmationEmailJobInput();
 
     await sendPatientConfirmationNotificationUseCase.sendPatientConfirmationNotification(
       patientConfirmationNotification,

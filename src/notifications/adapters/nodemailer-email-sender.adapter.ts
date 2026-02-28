@@ -1,9 +1,11 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { type Transporter } from 'nodemailer';
-import { MailConfiguration } from '../interfaces/mail-configuration.interface';
-import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
-import { PatientConfirmationNotificationChannel } from '../interfaces/patient-confirmation-notification-channel.interface';
+import {
+  MailConfiguration,
+  PatientConfirmationEmailJobInput,
+  PatientConfirmationNotificationChannel,
+} from '../interfaces';
 
 @Injectable()
 export class NodemailerEmailSenderAdapter

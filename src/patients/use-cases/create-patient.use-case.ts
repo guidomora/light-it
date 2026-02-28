@@ -1,16 +1,14 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { EnqueuePatientConfirmationEmailUseCase } from '../../notifications/use-cases/enqueue-patient-confirmation-email.use-case';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 import { PatientEntity } from '../entities/patient.entity';
-import { CreatePatientDetailsInput } from '../interfaces/create-patient-details.input';
 import {
+  CreatePatientDetailsInput,
   DOCUMENT_PHOTO_STORAGE,
   DocumentPhotoStorage,
-} from '../interfaces/document-photo-storage.interface';
-import {
   PATIENT_REPOSITORY,
   PatientRepository,
-} from '../interfaces/patient.repository.interface';
-import { UploadedDocumentPhoto } from '../interfaces/uploaded-document-photo.interface';
+  UploadedDocumentPhoto,
+} from '../interfaces';
 
 @Injectable()
 export class CreatePatientUseCase {
@@ -21,17 +19,16 @@ export class CreatePatientUseCase {
     private readonly patientRepository: PatientRepository,
     @Inject(DOCUMENT_PHOTO_STORAGE)
     private readonly documentPhotoStorage: DocumentPhotoStorage,
-    private readonly enqueuePatientConfirmationEmailUseCase: EnqueuePatientConfirmationEmailUseCase,
-  ) {}
+    private readonly notificationsService: NotificationsService,
+  ) { }
 
   async createPatient(
     patientRegistrationData: CreatePatientDetailsInput,
     uploadedDocumentPhoto: UploadedDocumentPhoto,
   ): Promise<PatientEntity> {
-    const documentPhotoUrl =
-      await this.documentPhotoStorage.uploadDocumentPhoto(
-        uploadedDocumentPhoto,
-      );
+    const documentPhotoUrl = await this.documentPhotoStorage.uploadDocumentPhoto(
+      uploadedDocumentPhoto,
+    );
 
     const createdPatient = await this.patientRepository.createPatient({
       ...patientRegistrationData,
@@ -39,15 +36,13 @@ export class CreatePatientUseCase {
     });
 
     try {
-      await this.enqueuePatientConfirmationEmailUseCase.enqueuePatientConfirmationEmail(
-        createdPatient,
-      );
+      await this.notificationsService.notifyPatientRegistration(createdPatient);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Unknown queueing error.';
+        error instanceof Error ? error.message : 'Unknown notification error.';
 
       this.logger.error(
-        `Patient ${createdPatient.id} was created but email enqueue failed: ${errorMessage}`,
+        `Patient ${createdPatient.id} was created but notification dispatch failed: ${errorMessage}`,
       );
     }
 

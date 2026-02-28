@@ -5,8 +5,10 @@ import {
   PATIENT_CONFIRMATION_EMAIL_JOB_NAME,
   PATIENT_EMAIL_QUEUE_NAME,
 } from '../constants/patient-email.constants';
-import { EmailQueuePublisher } from '../interfaces/email-queue-publisher.interface';
-import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
+import {
+  EmailQueuePublisher,
+  PatientConfirmationEmailJobInput,
+} from '../interfaces';
 
 @Injectable()
 export class BullmqEmailQueuePublisher implements EmailQueuePublisher {

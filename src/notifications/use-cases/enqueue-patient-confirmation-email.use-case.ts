@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PatientEntity } from '../../patients/entities/patient.entity';
-import {
-  EMAIL_QUEUE_PUBLISHER,
-  EmailQueuePublisher,
-} from '../interfaces/email-queue-publisher.interface';
+import { EMAIL_QUEUE_PUBLISHER, EmailQueuePublisher } from '../interfaces';
 
 @Injectable()
 export class EnqueuePatientConfirmationEmailUseCase {

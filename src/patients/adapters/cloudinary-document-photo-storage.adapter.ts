@@ -1,7 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
-import { DocumentPhotoStorage } from '../interfaces/document-photo-storage.interface';
-import { UploadedDocumentPhoto } from '../interfaces/uploaded-document-photo.interface';
+import { DocumentPhotoStorage, UploadedDocumentPhoto } from '../interfaces';
 
 @Injectable()
 export class CloudinaryDocumentPhotoStorageAdapter implements DocumentPhotoStorage {
