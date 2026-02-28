@@ -3,14 +3,14 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { PATIENT_EMAIL_QUEUE_NAME } from '../constants/patient-email.constants';
 import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
-import { SendPatientConfirmationEmailUseCase } from '../use-cases/send-patient-confirmation-email.use-case';
+import { SendPatientConfirmationNotificationUseCase } from '../use-cases/send-patient-confirmation-notification.use-case';
 
 @Processor(PATIENT_EMAIL_QUEUE_NAME)
 export class PatientEmailProcessor extends WorkerHost {
   private readonly logger = new Logger(PatientEmailProcessor.name);
 
   constructor(
-    private readonly sendPatientConfirmationEmailUseCase: SendPatientConfirmationEmailUseCase,
+    private readonly sendPatientConfirmationNotificationUseCase: SendPatientConfirmationNotificationUseCase,
   ) {
     super();
   }
@@ -18,7 +18,7 @@ export class PatientEmailProcessor extends WorkerHost {
   async process(
     patientEmailJob: Job<PatientConfirmationEmailJobInput>,
   ): Promise<void> {
-    await this.sendPatientConfirmationEmailUseCase.sendPatientConfirmationEmail(
+    await this.sendPatientConfirmationNotificationUseCase.sendPatientConfirmationNotification(
       patientEmailJob.data,
     );
   }

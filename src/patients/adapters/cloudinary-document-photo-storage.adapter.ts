@@ -5,22 +5,8 @@ import { UploadedDocumentPhoto } from '../interfaces/uploaded-document-photo.int
 
 @Injectable()
 export class CloudinaryDocumentPhotoStorageAdapter implements DocumentPhotoStorage {
-  constructor() {
-    const cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const cloudinaryApiKey = process.env.API_KEY;
-    const cloudinaryApiSecret = process.env.API_SECRET;
-
-    if (!cloudinaryCloudName || !cloudinaryApiKey || !cloudinaryApiSecret) {
-      throw new Error('Cloudinary configuration is incomplete.');
-    }
-
-    cloudinary.config({
-      cloud_name: cloudinaryCloudName,
-      api_key: cloudinaryApiKey,
-      api_secret: cloudinaryApiSecret,
-      secure: true,
-    });
-  }
+  private readonly cloudinaryConfiguration = this.getCloudinaryConfiguration();
+  private readonly cloudinaryClient = this.createCloudinaryClient();
 
   async uploadDocumentPhoto(
     documentPhotoFile: UploadedDocumentPhoto,
@@ -28,7 +14,7 @@ export class CloudinaryDocumentPhotoStorageAdapter implements DocumentPhotoStora
     const documentPhotoDataUri = `data:${documentPhotoFile.mimetype};base64,${documentPhotoFile.buffer.toString('base64')}`;
 
     try {
-      const uploadResult = await cloudinary.uploader.upload(
+      const uploadResult = await this.cloudinaryClient.uploader.upload(
         documentPhotoDataUri,
         {
           folder: 'patients/documents',
@@ -42,5 +28,27 @@ export class CloudinaryDocumentPhotoStorageAdapter implements DocumentPhotoStora
         'Failed to upload patient document photo.',
       );
     }
+  }
+
+  private getCloudinaryConfiguration() {
+    const cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const cloudinaryApiKey = process.env.API_KEY;
+    const cloudinaryApiSecret = process.env.API_SECRET;
+
+    if (!cloudinaryCloudName || !cloudinaryApiKey || !cloudinaryApiSecret) {
+      throw new Error('Cloudinary configuration is incomplete.');
+    }
+
+    return {
+      cloud_name: cloudinaryCloudName,
+      api_key: cloudinaryApiKey,
+      api_secret: cloudinaryApiSecret,
+      secure: true,
+    };
+  }
+
+  private createCloudinaryClient() {
+    cloudinary.config(this.cloudinaryConfiguration);
+    return cloudinary;
   }
 }

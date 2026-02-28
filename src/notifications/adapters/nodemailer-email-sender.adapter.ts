@@ -1,30 +1,31 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { type Transporter } from 'nodemailer';
-import { EmailSender } from '../interfaces/email-sender.interface';
 import { MailConfiguration } from '../interfaces/mail-configuration.interface';
 import { PatientConfirmationEmailJobInput } from '../interfaces/patient-confirmation-email-job.input';
+import { PatientConfirmationNotificationChannel } from '../interfaces/patient-confirmation-notification-channel.interface';
 
 @Injectable()
-export class NodemailerEmailSenderAdapter implements EmailSender {
+export class NodemailerEmailSenderAdapter
+  implements PatientConfirmationNotificationChannel
+{
   private readonly mailConfiguration = this.getMailConfiguration();
   private readonly mailTransporter: Transporter = this.createMailTransporter();
-  private readonly fromEmailAddress: string =
-    this.mailConfiguration.mailFromAddress;
+  private readonly fromEmailAddress: string = this.mailConfiguration.mailFromAddress;
 
-  async sendPatientConfirmationEmail(
-    patientConfirmationEmailJob: PatientConfirmationEmailJobInput,
+  async sendPatientConfirmationNotification(
+    patientConfirmationNotification: PatientConfirmationEmailJobInput,
   ): Promise<void> {
     try {
       await this.mailTransporter.sendMail({
         from: this.fromEmailAddress,
-        to: patientConfirmationEmailJob.patientEmailAddress,
+        to: patientConfirmationNotification.patientEmailAddress,
         subject: 'Patient registration confirmation',
-        text: `Hello ${patientConfirmationEmailJob.patientFullName}, your registration has been completed successfully.`,
+        text: `Hello ${patientConfirmationNotification.patientFullName}, your registration has been completed successfully.`,
       });
     } catch {
       throw new InternalServerErrorException(
-        `Failed to send confirmation email for patient ${patientConfirmationEmailJob.patientId}.`,
+        `Failed to send confirmation email for patient ${patientConfirmationNotification.patientId}.`,
       );
     }
   }
