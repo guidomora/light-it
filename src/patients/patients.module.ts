@@ -5,7 +5,7 @@ import { CloudinaryDocumentPhotoStorageAdapter } from './adapters/cloudinary-doc
 import { PatientEntity } from './entities/patient.entity';
 import { DOCUMENT_PHOTO_STORAGE, PATIENT_REPOSITORY } from './interfaces';
 import { PatientsController } from './patients.controller';
-import { TypeormPatientRepository } from './repositories/typeorm-patient.repository';
+import { PatientRepositoryAdapter } from './repositories/patient.repository';
 import { PatientsService } from './services/patients.service';
 import { CreatePatientUseCase } from './use-cases/create-patient.use-case';
 
@@ -15,11 +15,11 @@ import { CreatePatientUseCase } from './use-cases/create-patient.use-case';
   providers: [
     PatientsService,
     CreatePatientUseCase,
-    TypeormPatientRepository,
+    PatientRepositoryAdapter,
     CloudinaryDocumentPhotoStorageAdapter,
     {
       provide: PATIENT_REPOSITORY,
-      useExisting: TypeormPatientRepository,
+      useExisting: PatientRepositoryAdapter,
     },
     {
       provide: DOCUMENT_PHOTO_STORAGE,

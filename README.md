@@ -1,7 +1,9 @@
 # light-it
 
 Patient registration API built with NestJS + TypeORM + PostgreSQL.
-The patient document image is uploaded to Cloudinary, and only the URL is stored in the database.
+Since saving an image in a database it is not a good practice, it is always better to use a cloud storage service like S3 or any other cloud storage service.
+In this case we wont be using S3 but we will be using Cloudinary to do it in a proper way. The patient document image is uploaded to Cloudinary, and only the URL is stored in the database.
+
 Confirmation email sending is asynchronous through BullMQ + Redis + Nodemailer.
 
 ## Requirements
@@ -21,32 +23,7 @@ npm install
 This repo uses a root `.env` file (see [src/app.module.ts](src/app.module.ts)).
 The same `POSTGRES_*` and `REDIS_*` values are used by both the API and `docker-compose.yaml`.
 
-Copy `templates.env` to `.env`:
-
-Expected variables:
-
-```
-PORT=3000
-
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=user
-POSTGRES_PASSWORD=password123
-POSTGRES_DB=myapp_db
-
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_PASSWORD=
-
-MAIL_PROVIDER=gmail
-MAIL_USER=lightitpatient@gmail.com
-MAIL_FROM=lightitpatient@gmail.com
-MAIL_KEY=your_gmail_app_password
-
-CLOUDINARY_CLOUD_NAME=node161
-API_KEY=your_cloudinary_api_key
-API_SECRET=your_cloudinary_api_secret
-```
+Copy `templates.env` (expected variables) to `.env`:
 
 Required mail variables are `MAIL_PROVIDER`, `MAIL_USER`, `MAIL_FROM`, and `MAIL_KEY`.
 If any required value is missing or empty, the app will throw an error at startup.

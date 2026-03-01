@@ -6,7 +6,7 @@ import {
 } from '../mocks';
 import { SendPatientConfirmationSmsUseCase } from './send-patient-confirmation-sms.use-case';
 
-describe('SendPatientConfirmationSmsUseCase', () => {
+describe('GIVEN SendPatientConfirmationSmsUseCase', () => {
   let sendPatientConfirmationSmsUseCase: SendPatientConfirmationSmsUseCase;
   let smsSender: jest.Mocked<SmsSender>;
 
@@ -31,7 +31,7 @@ describe('SendPatientConfirmationSmsUseCase', () => {
       );
   });
 
-  it('maps sms job data into an sms message and delegates to sms sender', async () => {
+  it('SHOULD map sms job data into an sms message and delegate to sms sender', async () => {
     const patientConfirmationSmsJob = buildPatientConfirmationSmsJobInput();
 
     await sendPatientConfirmationSmsUseCase.sendPatientConfirmationSms(

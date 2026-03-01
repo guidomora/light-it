@@ -6,7 +6,7 @@ import {
 import { buildNotificationPatientEntity } from '../mocks';
 import { EnqueuePatientConfirmationSmsUseCase } from './enqueue-patient-confirmation-sms.use-case';
 
-describe('EnqueuePatientConfirmationSmsUseCase', () => {
+describe('GIVEN EnqueuePatientConfirmationSmsUseCase', () => {
   let enqueuePatientConfirmationSmsUseCase: EnqueuePatientConfirmationSmsUseCase;
   let smsQueuePublisher: jest.Mocked<SmsQueuePublisher>;
 
@@ -31,7 +31,7 @@ describe('EnqueuePatientConfirmationSmsUseCase', () => {
       );
   });
 
-  it('maps patient data into sms queue payload and publishes it', async () => {
+  it('SHOULD map patient data into sms queue payload and publish it', async () => {
     const patientEntity = buildNotificationPatientEntity();
 
     await enqueuePatientConfirmationSmsUseCase.enqueuePatientConfirmationSms(

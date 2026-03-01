@@ -9,7 +9,6 @@ import { PATIENT_SMS_QUEUE_NAME } from './constants/patient-sms.constants';
 import {
   EMAIL_QUEUE_PUBLISHER,
   PATIENT_CONFIRMATION_NOTIFICATION_CHANNEL,
-  SMS_NOTIFICATIONS_ENABLED,
   SMS_QUEUE_PUBLISHER,
   SMS_SENDER,
 } from './interfaces';
@@ -20,9 +19,6 @@ import { EnqueuePatientConfirmationEmailUseCase } from './use-cases/enqueue-pati
 import { EnqueuePatientConfirmationSmsUseCase } from './use-cases/enqueue-patient-confirmation-sms.use-case';
 import { SendPatientConfirmationNotificationUseCase } from './use-cases/send-patient-confirmation-notification.use-case';
 import { SendPatientConfirmationSmsUseCase } from './use-cases/send-patient-confirmation-sms.use-case';
-
-const smsNotificationsEnabled =
-  process.env.NOTIFICATIONS_SMS_ENABLED?.toLowerCase() === 'true';
 
 @Module({
   imports: [
@@ -56,10 +52,6 @@ const smsNotificationsEnabled =
     {
       provide: PATIENT_CONFIRMATION_NOTIFICATION_CHANNEL,
       useExisting: NodemailerEmailSenderAdapter,
-    },
-    {
-      provide: SMS_NOTIFICATIONS_ENABLED,
-      useValue: smsNotificationsEnabled,
     },
     {
       provide: SMS_SENDER,

@@ -4,7 +4,7 @@ import { EnqueuePatientConfirmationEmailUseCase } from '../use-cases/enqueue-pat
 import { EnqueuePatientConfirmationSmsUseCase } from '../use-cases/enqueue-patient-confirmation-sms.use-case';
 import { NotificationsService } from './notifications.service';
 
-describe('NotificationsService', () => {
+describe('GIVEN NotificationsService', () => {
   let notificationsService: NotificationsService;
   let enqueuePatientConfirmationEmailUseCaseMock: {
     enqueuePatientConfirmationEmail: jest.Mock;
@@ -39,7 +39,7 @@ describe('NotificationsService', () => {
     notificationsService = module.get<NotificationsService>(NotificationsService);
   });
 
-  it('enqueues both email and sms notifications for a registered patient', async () => {
+  it('SHOULD enqueue both email and sms notifications for a registered patient', async () => {
     const patientEntity = buildNotificationPatientEntity();
 
     await notificationsService.notifyPatientRegistration(patientEntity);
@@ -52,7 +52,7 @@ describe('NotificationsService', () => {
     ).toHaveBeenCalledWith(patientEntity);
   });
 
-  it('does not throw when one notification channel enqueue fails', async () => {
+  it('SHOULD not throw when one notification channel enqueue fails', async () => {
     const patientEntity = buildNotificationPatientEntity();
 
     enqueuePatientConfirmationEmailUseCaseMock.enqueuePatientConfirmationEmail.mockRejectedValue(

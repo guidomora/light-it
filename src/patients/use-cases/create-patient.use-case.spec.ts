@@ -15,7 +15,7 @@ import {
 } from '../mocks';
 import { CreatePatientUseCase } from './create-patient.use-case';
 
-describe('CreatePatientUseCase', () => {
+describe('GIVEN CreatePatientUseCase', () => {
   let createPatientUseCase: CreatePatientUseCase;
   let patientRepository: jest.Mocked<PatientRepository>;
   let documentPhotoStorage: jest.Mocked<DocumentPhotoStorage>;
@@ -58,7 +58,7 @@ describe('CreatePatientUseCase', () => {
       module.get<CreatePatientUseCase>(CreatePatientUseCase);
   });
 
-  it('uploads document photo and creates a patient using the repository', async () => {
+  it('SHOULD upload document photo and create a patient using the repository', async () => {
     const patientRegistrationData: CreatePatientDetailsInput =
       buildCreatePatientDetailsInput();
     const uploadedDocumentPhoto: UploadedDocumentPhoto =
@@ -99,7 +99,7 @@ describe('CreatePatientUseCase', () => {
     expect(result).toEqual(createdPatient);
   });
 
-  it('returns the created patient even when notifications fail', async () => {
+  it('SHOULD return the created patient even when notifications fail', async () => {
     const patientRegistrationData: CreatePatientDetailsInput =
       buildCreatePatientDetailsInput({
         fullName: 'Grace Hopper',

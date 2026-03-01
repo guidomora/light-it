@@ -6,7 +6,7 @@ import {
 import { buildPatientConfirmationEmailJobInput } from '../mocks';
 import { SendPatientConfirmationNotificationUseCase } from './send-patient-confirmation-notification.use-case';
 
-describe('SendPatientConfirmationNotificationUseCase', () => {
+describe('GIVEN SendPatientConfirmationNotificationUseCase', () => {
   let sendPatientConfirmationNotificationUseCase: SendPatientConfirmationNotificationUseCase;
   let patientConfirmationNotificationChannel: jest.Mocked<PatientConfirmationNotificationChannel>;
 
@@ -31,7 +31,7 @@ describe('SendPatientConfirmationNotificationUseCase', () => {
       );
   });
 
-  it('delegates to notification channel with the job payload', async () => {
+  it('SHOULD delegate to notification channel with the job payload', async () => {
     const patientConfirmationNotification =
       buildPatientConfirmationEmailJobInput();
 

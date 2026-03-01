@@ -5,7 +5,7 @@ import { PatientEntity } from '../entities/patient.entity';
 import { CreatePatientInput, PatientRepository } from '../interfaces';
 
 @Injectable()
-export class TypeormPatientRepository implements PatientRepository {
+export class PatientRepositoryAdapter implements PatientRepository {
   constructor(
     @InjectRepository(PatientEntity)
     private readonly patientOrmRepository: Repository<PatientEntity>,

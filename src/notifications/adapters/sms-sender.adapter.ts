@@ -1,14 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { SMS_NOTIFICATIONS_ENABLED, SmsMessageInput, SmsSender } from '../interfaces';
+import { Injectable, Logger } from '@nestjs/common';
+import { SmsMessageInput, SmsSender } from '../interfaces';
 
 @Injectable()
 export class SmsSenderAdapter implements SmsSender {
   private readonly logger = new Logger(SmsSenderAdapter.name);
-
-  constructor(
-    @Inject(SMS_NOTIFICATIONS_ENABLED)
-    private readonly smsNotificationsEnabled: boolean,
-  ) {}
+  private readonly smsNotificationsEnabled = this.isSmsNotificationsEnabled();
 
   async sendSms(smsMessage: SmsMessageInput): Promise<void> {
     if (this.smsNotificationsEnabled) {
@@ -21,5 +17,9 @@ export class SmsSenderAdapter implements SmsSender {
     this.logger.debug(
       `SMS notifications are disabled. Message for ${smsMessage.recipientPhoneNumber} was ignored.`,
     );
+  }
+
+  private isSmsNotificationsEnabled(): boolean {
+    return process.env.NOTIFICATIONS_SMS_ENABLED?.toLowerCase() === 'true';
   }
 }
